@@ -32,7 +32,7 @@ html.yt-tabfs-enabled #movie_player .html5-video-container {
   background: transparent !important;
 }
 
-/* Simplified video styling - let it fill the container naturally */
+/* Simplified video styling - maintain aspect ratio and fill container properly */
 html.yt-tabfs-enabled #movie_player.html5-video-player video.video-stream.html5-main-video[style],
 html.yt-tabfs-enabled #movie_player.html5-video-player video.html5-main-video[style],
 html.yt-tabfs-enabled #movie_player.html5-video-player video.video-stream[style],
@@ -46,7 +46,7 @@ html.yt-tabfs-enabled #movie_player video[style] {
   max-height: none !important;
   min-width: 0 !important;
   min-height: 0 !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
   transform: none !important;
   margin: 0 !important;
   padding: 0 !important;
