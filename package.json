@@ -1,0 +1,35 @@
+{
+  "name": "youtube-tabfs",
+  "version": "1.0.0",
+  "description": "YouTube Tab-Fullscreen Extension - Twitch-style fullscreen experience",
+  "type": "module",
+  "scripts": {
+    "dev": "rollup -c --watch",
+    "build": "rollup -c --environment NODE_ENV:production",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@playwright/test": "^1.48.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@types/chrome": "^0.0.254",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "globby": "^14.1.0",
+    "happy-dom": "^15.11.6",
+    "rollup": "^4.28.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "license": "MIT",
+  "author": "YouTube Tab-Fullscreen Team"
+}
