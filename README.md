@@ -18,8 +18,8 @@ A browser extension that provides a **Twitch-style "tab-fullscreen" experience**
 
 1. **Clone and install dependencies:**
    ```bash
-   git clone <repo-url>
-   cd youtube-tabfs
+   git clone https://github.com/xander1421/yt-fs.git
+   cd yt-fs
    npm install
    ```
 
