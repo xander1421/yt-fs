@@ -118,34 +118,61 @@ html.yt-tabfs-enabled #primary {
   padding: 0 !important;
 }
 
-/* Tab-Fullscreen Button Styles */
+/* Tab-Fullscreen Button Styles - Match YouTube's native button style */
 #yt-tabfs-button {
   background: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border: none !important;
   color: white !important;
-  padding: 6px 8px !important;
-  margin: 0 4px !important;
-  border-radius: 2px !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
+  padding: 8px !important;
+  margin: 0 !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  min-width: 24px !important;
-  height: 24px !important;
+  opacity: 0.9 !important;
+  transition: opacity 0.1s ease !important;
+  width: 48px !important;
+  height: 48px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  outline: none !important;
+  position: relative !important;
 }
 
 #yt-tabfs-button:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+}
+
+#yt-tabfs-button:focus {
+  opacity: 1 !important;
 }
 
 #yt-tabfs-button.active {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.7) !important;
-  color: #ff6b6b !important;
+  opacity: 1 !important;
+}
+
+/* Red underline indicator when active - positioned below the button */
+#yt-tabfs-button.active::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 32px !important;
+  height: 2px !important;
+  background: #ff0000 !important;
+  border-radius: 1px !important;
+}
+
+/* Style the SVG icon */
+#yt-tabfs-button svg {
+  width: 24px !important;
+  height: 24px !important;
+  pointer-events: none !important;
+  color: white !important;
+}
+
+/* Change icon color when active */
+#yt-tabfs-button.active svg {
+  color: #ff0000 !important;
 }
 
 /* Handle theater mode compatibility */

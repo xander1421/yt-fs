@@ -1,16 +1,18 @@
 {
   "name": "youtube-tabfs",
-  "version": "1.0.0",
-  "description": "YouTube Tab-Fullscreen Extension - Twitch-style fullscreen experience",
+  "version": "1.1.0",
+  "description": "YouTube Tab-Fullscreen Extension with Auto Ad-Skip - Twitch-style fullscreen experience with automatic ad-skipping",
   "type": "module",
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rollup -c --environment NODE_ENV:production",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e:headless",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:headless": "playwright test --config=playwright.config.ts",
     "test:e2e:ui": "playwright test --ui",
+    "test:ci": "npm run test:unit",
     "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {

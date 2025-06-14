@@ -1,12 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Tab-Fullscreen",
-  "version": "1.0.0",
-  "description": "Twitch-style tab-fullscreen experience on YouTube",
+  "name": "YouTube Tab-Fullscreen + Auto Ad-Skip",
+  "version": "1.1.0",
+  "description": "Twitch-style tab-fullscreen experience on YouTube with automatic ad-skipping",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "tabs"
   ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/watch*"],
@@ -34,6 +39,6 @@
       "48": "icons/48.png",
       "128": "icons/128.png"
     },
-    "default_title": "YouTube Tab-Fullscreen"
+    "default_title": "YouTube Tab-Fullscreen + Auto Ad-Skip"
   }
 } 
