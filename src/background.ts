@@ -1,55 +1,68 @@
 /**
  * YouTube Tab-Fullscreen Extension - Background Script
- * Handles keyboard shortcuts and commands
+ * Compatible with both Manifest V2 (Firefox) and V3 (Chrome)
  */
 
+// Use browser API if available (Firefox), otherwise use chrome API
+const browserAPI = (typeof browser !== 'undefined' && browser) ? browser : chrome;
+
 // Listen for keyboard commands from the manifest
-chrome.commands.onCommand.addListener(async (command: string) => {
-  console.log('[YT-TabFS Background] Command received:', command);
-  
+browserAPI.commands.onCommand.addListener(async (command: string) => {
   if (command === 'toggle-tabfs') {
     try {
       // Get the active tab
-      const [activeTab] = await chrome.tabs.query({
+      const tabs = await browserAPI.tabs.query({
         active: true,
         currentWindow: true
       });
       
+      const activeTab = tabs[0];
       if (!activeTab?.id) {
-        console.log('[YT-TabFS Background] No active tab found');
         return;
       }
       
       // Check if the tab is on YouTube
       if (!activeTab.url?.includes('youtube.com')) {
-        console.log('[YT-TabFS Background] Not on YouTube, ignoring command');
         return;
       }
       
       // Send message to content script
-      await chrome.tabs.sendMessage(activeTab.id, {
+      await browserAPI.tabs.sendMessage(activeTab.id, {
         action: 'toggle-tabfs'
       });
-      
-      console.log('[YT-TabFS Background] Toggle message sent to content script');
-      
     } catch (error) {
-      console.error('[YT-TabFS Background] Error handling command:', error);
+      // Silent fail
     }
   }
 });
 
-// Optional: Handle extension icon click
-chrome.action.onClicked.addListener(async (tab) => {
-  if (tab.id && tab.url?.includes('youtube.com')) {
-    try {
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'toggle-tabfs'
-      });
-    } catch (error) {
-      console.error('[YT-TabFS Background] Error on icon click:', error);
+// Handle extension icon click
+// For Manifest V3 (Chrome)
+if (browserAPI.action?.onClicked) {
+  browserAPI.action.onClicked.addListener(async (tab: any) => {
+    if (tab.id && tab.url?.includes('youtube.com')) {
+      try {
+        await browserAPI.tabs.sendMessage(tab.id, {
+          action: 'toggle-tabfs'
+        });
+      } catch (error) {
+        // Silent fail
+      }
     }
-  }
-});
+  });
+}
 
-console.log('[YT-TabFS Background] Background script loaded'); 
+// For Manifest V2 (Firefox)
+if (browserAPI.browserAction?.onClicked) {
+  browserAPI.browserAction.onClicked.addListener(async (tab: any) => {
+    if (tab.id && tab.url?.includes('youtube.com')) {
+      try {
+        await browserAPI.tabs.sendMessage(tab.id, {
+          action: 'toggle-tabfs'
+        });
+      } catch (error) {
+        // Silent fail
+      }
+    }
+  });
+}

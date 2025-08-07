@@ -1,11 +1,11 @@
-# Privacy Policy for YouTube Tab-Fullscreen + Auto Ad-Skip
+# Privacy Policy for YouTube Tab-Fullscreen
 
-**Last Updated**: June 14, 2024  
-**Version**: 1.1.0
+**Last Updated**: December 30, 2024  
+**Version**: 1.2.0
 
 ## Overview
 
-YouTube Tab-Fullscreen + Auto Ad-Skip ("the Extension") is committed to protecting your privacy. This privacy policy explains how we handle information when you use our browser extension.
+YouTube Tab-Fullscreen ("the Extension") is committed to protecting your privacy. This privacy policy explains how we handle information when you use our browser extension.
 
 ## Information We Collect
 
@@ -15,13 +15,12 @@ YouTube Tab-Fullscreen + Auto Ad-Skip ("the Extension") is committed to protecti
 - **No Tracking**: We do not use analytics, tracking pixels, or any monitoring tools
 
 ### Permissions Used
-- **`activeTab`**: Required to inject the tab-fullscreen button and ad-skipping functionality into YouTube pages
-- **`storage`**: Used to remember your tab-fullscreen preferences between browser sessions
+- **`activeTab`**: Required to inject the tab-fullscreen button and communicate with the content script on YouTube pages
 
 ## How We Use Information
 
 - **Functionality Only**: Stored preferences are used solely to remember your tab-fullscreen state across YouTube videos
-- **Local Processing**: All ad-skipping and tab-fullscreen functionality runs locally in your browser
+- **Local Processing**: All tab-fullscreen functionality runs locally in your browser
 - **No External Servers**: No data is sent to external servers or third parties
 
 ## Data Sharing
@@ -38,9 +37,9 @@ YouTube Tab-Fullscreen + Auto Ad-Skip ("the Extension") is committed to protecti
 
 ## Your Rights
 
-- **Data Control**: You can clear stored preferences by disabling/removing the extension
+- **Data Control**: You can clear stored preferences by disabling/removing the extension or clearing browser data
 - **No Account Required**: The extension works without creating accounts or providing personal information
-- **Transparency**: All source code is available for review
+- **Open Source**: All source code is available for review
 
 ## Changes to This Policy
 
@@ -48,17 +47,14 @@ We may update this privacy policy from time to time. Any changes will be reflect
 
 ## Contact Information
 
-If you have questions about this privacy policy, please contact us through:
-- **GitHub Issues**: [Repository Issues Page]
-- **Extension Store Reviews**: Leave feedback on the Chrome Web Store
+For questions about this privacy policy or the extension, please visit our GitHub repository or contact us through the browser extension store.
 
 ## Compliance
 
 This extension complies with:
 - Chrome Web Store Developer Program Policies
-- General Data Protection Regulation (GDPR)
-- California Consumer Privacy Act (CCPA)
+- Firefox Add-on Policies
+- General Data Protection Regulation (GDPR) principles
+- California Consumer Privacy Act (CCPA) requirements
 
----
-
-**Summary**: This extension stores only your tab-fullscreen preferences locally in your browser. No personal data is collected, no tracking is performed, and no information is transmitted to external servers. 
+The extension operates entirely client-side with no data collection, making it inherently privacy-preserving.

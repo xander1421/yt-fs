@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "YouTube Tab-Fullscreen",
   "version": "1.2.0",
   "description": "Twitch-style tab-fullscreen experience on YouTube",
@@ -7,8 +7,8 @@
     "activeTab"
   ],
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "content_scripts": [
     {
@@ -31,12 +31,18 @@
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
-  "action": {
+  "browser_action": {
     "default_icon": {
       "32": "icons/32.png",
       "48": "icons/48.png",
       "128": "icons/128.png"
     },
     "default_title": "YouTube Tab-Fullscreen"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "youtube-tabfs@extension",
+      "strict_min_version": "78.0"
+    }
   }
-} 
+}

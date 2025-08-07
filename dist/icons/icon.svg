@@ -1,0 +1,23 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="128" height="128" rx="24" fill="#FF0000"/>
+  
+  <!-- Tab bar (browser chrome) -->
+  <rect x="32" y="20" width="64" height="12" rx="4" fill="white" opacity="0.9"/>
+  
+  <!-- Video frame -->
+  <rect x="20" y="36" width="88" height="72" rx="8" fill="none" stroke="white" stroke-width="4"/>
+  
+  <!-- Expansion arrows -->
+  <!-- Up arrow -->
+  <path d="M64 52 L64 44 M60 48 L64 44 L68 48" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Down arrow -->
+  <path d="M64 76 L64 84 M60 80 L64 84 L68 80" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Left arrow -->
+  <path d="M48 64 L40 64 M44 60 L40 64 L44 68" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Right arrow -->
+  <path d="M80 64 L88 64 M84 60 L88 64 L84 68" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
