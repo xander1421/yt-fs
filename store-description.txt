@@ -1,0 +1,33 @@
+YouTube Tab-Fullscreen
+
+Expand YouTube videos to fill your entire browser tab, similar to Twitch's theater mode.
+
+What It Does
+
+This extension adds a tab-fullscreen mode to YouTube. Unlike regular fullscreen, the video stays within your browser tab so you can still see other tabs and use browser shortcuts.
+
+Features
+
+- Expand videos beyond standard theater mode to fill your tab
+- Press Alt+T or click the toolbar button to toggle
+- Remembers your preference as you browse videos
+- Matches YouTube's native design
+- Lightweight (under 50KB)
+
+How to Use
+
+1. Install the extension
+2. Go to any YouTube video
+3. Click the button in video controls or press Alt+T
+
+Privacy
+
+- No data collection or tracking
+- No external connections
+- Only requires activeTab permission
+
+Compatibility
+
+- Works on all YouTube video pages
+- Supports Chrome, Edge, Brave, and Firefox
+- Compatible with YouTube Premium and other extensions

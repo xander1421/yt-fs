@@ -21,7 +21,10 @@
   "commands": {
     "toggle-tabfs": {
       "suggested_key": {
-        "default": "Alt+T"
+        "default": "Alt+T",
+        "linux": "Alt+T",
+        "windows": "Alt+T",
+        "mac": "Alt+T"
       },
       "description": "Toggle tab-fullscreen mode"
     }
@@ -42,7 +45,10 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "youtube-tabfs@extension",
-      "strict_min_version": "78.0"
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   }
 }

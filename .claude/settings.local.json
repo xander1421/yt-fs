@@ -4,7 +4,10 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(npm run build:*)",
-      "Bash(npm run build:firefox:*)"
+      "Bash(npm run build:firefox:*)",
+      "Bash(npm install)",
+      "Bash(sed:*)",
+      "Bash(convert:*)"
     ],
     "deny": []
   }

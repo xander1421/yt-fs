@@ -2,6 +2,9 @@
  * YouTube Tab-Fullscreen Extension - Content Script
  */
 
+// Debug flag - set to false for production
+const DEBUG = false;
+
 // Constants
 const STORAGE_KEY = 'ytTabFS';
 const CSS_CLASS = 'yt-tabfs-enabled';
@@ -156,7 +159,7 @@ function getControls(): Element | null {
   // Primary target - right controls left section (where autoplay, subtitles, settings are)
   const rightControlsLeft = document.querySelector('.ytp-chrome-controls .ytp-right-controls .ytp-right-controls-left');
   if (rightControlsLeft && isVisible(rightControlsLeft as HTMLElement)) {
-    console.log('[YT-TabFS] Found right-controls-left container');
+    if (DEBUG) console.log('[YT-TabFS] Found right-controls-left container');
     return rightControlsLeft;
   }
 
@@ -173,12 +176,12 @@ function getControls(): Element | null {
   for (const selector of selectors) {
     const controls = document.querySelector(selector);
     if (controls && isVisible(controls as HTMLElement)) {
-      console.log('[YT-TabFS] Found controls with selector:', selector);
+      if (DEBUG) console.log('[YT-TabFS] Found controls with selector:', selector);
       return controls;
     }
   }
 
-  console.warn('[YT-TabFS] No visible controls found');
+  if (DEBUG) console.warn('[YT-TabFS] No visible controls found');
   return null;
 }
 
@@ -194,19 +197,19 @@ function isVisible(element: HTMLElement): boolean {
  */
 async function waitForVideo(): Promise<boolean> {
   try {
-    console.log('[YT-TabFS] Waiting for video element...');
+    if (DEBUG) console.log('[YT-TabFS] Waiting for video element...');
     // Wait for video element - but don't require specific readyState on first load
     await wait(() => {
       const video = document.querySelector('video');
       if (video) {
-        console.log('[YT-TabFS] Video found, readyState:', video.readyState);
+        if (DEBUG) console.log('[YT-TabFS] Video found, readyState:', video.readyState);
         // On initial load, video might not be ready yet, but controls could be
         return true;
       }
       return false;
     }, 10000, 100);
 
-    console.log('[YT-TabFS] Video ready, waiting for controls...');
+    if (DEBUG) console.log('[YT-TabFS] Video ready, waiting for controls...');
     // Wait for controls with multiple attempts
     let controls = null;
     for (let attempts = 0; attempts < 3; attempts++) {
@@ -214,20 +217,20 @@ async function waitForVideo(): Promise<boolean> {
         controls = await wait(() => getControls(), 5000, 100);
         if (controls) break;
       } catch (e) {
-        console.log('[YT-TabFS] Controls wait attempt', attempts + 1, 'failed, retrying...');
+        if (DEBUG) console.log('[YT-TabFS] Controls wait attempt', attempts + 1, 'failed, retrying...');
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
 
     if (controls) {
-      console.log('[YT-TabFS] Controls found, player is ready');
+      if (DEBUG) console.log('[YT-TabFS] Controls found, player is ready');
       return true;
     } else {
-      console.error('[YT-TabFS] Controls not found after all attempts');
+      if (DEBUG) console.error('[YT-TabFS] Controls not found after all attempts');
       return false;
     }
   } catch (e) {
-    console.error('[YT-TabFS] waitForVideo error:', e);
+    if (DEBUG) console.error('[YT-TabFS] waitForVideo error:', e);
     return false;
   }
 }
@@ -243,24 +246,24 @@ namespace UIInjector {
       // Check if already injected
       const existingButton = document.getElementById(BUTTON_ID);
       if (isInjected && existingButton && existingButton.isConnected) {
-        console.log('[YT-TabFS] Button already exists and connected');
+        if (DEBUG) console.log('[YT-TabFS] Button already exists and connected');
         return true;
       }
 
       const controls = getControls();
       if (!controls) {
-        console.log('[YT-TabFS] No controls found');
+        if (DEBUG) console.log('[YT-TabFS] No controls found');
         return false;
       }
 
-      console.log('[YT-TabFS] Found controls:', controls.className);
+      if (DEBUG) console.log('[YT-TabFS] Found controls:', controls.className);
 
       // Clean up any orphaned buttons
       ToggleButton.cleanup();
 
       const button = ToggleButton.create();
       if (!button) {
-        console.error('[YT-TabFS] Failed to create button');
+        if (DEBUG) console.error('[YT-TabFS] Failed to create button');
         return false;
       }
 
@@ -271,7 +274,7 @@ namespace UIInjector {
         // Always prepend to make it the leftmost button
         controls.prepend(button);
         
-        console.log('[YT-TabFS] Button injected successfully to', controls.className);
+        if (DEBUG) console.log('[YT-TabFS] Button injected successfully to', controls.className);
         
         // Verify button is in DOM
         const verifyButton = document.getElementById(BUTTON_ID);
@@ -279,15 +282,15 @@ namespace UIInjector {
           isInjected = true;
           return true;
         } else {
-          console.error('[YT-TabFS] Button not found after injection');
+          if (DEBUG) console.error('[YT-TabFS] Button not found after injection');
           return false;
         }
       } catch (e) {
-        console.error('[YT-TabFS] Error during injection:', e);
+        if (DEBUG) console.error('[YT-TabFS] Error during injection:', e);
         return false;
       }
     } catch (outerError) {
-      console.error('[YT-TabFS] Outer error in inject:', outerError);
+      if (DEBUG) console.error('[YT-TabFS] Outer error in inject:', outerError);
       return false;
     }
   }
@@ -328,7 +331,7 @@ namespace EventBridge {
     
     // Listen for messages from background script
     browserAPI.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
-      console.log('[YT-TabFS] Received message:', message);
+      if (DEBUG) console.log('[YT-TabFS] Received message:', message);
       if (message.action === 'toggle-tabfs') {
         handleToggle();
         sendResponse({ success: true });
@@ -337,32 +340,33 @@ namespace EventBridge {
     });
 
     // Fallback: Direct keyboard listener as backup
-    // Add with capture phase to ensure we get the event first
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-      // Check for Alt+T
-      if (event.altKey && event.key.toLowerCase() === 't' && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
-        console.log('[YT-TabFS] Alt+T detected via direct listener');
+    // For Firefox, we need to handle both 't' and 'T' cases
+    // YouTube may prevent default on some key combinations
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check for Alt+T (handle both lowercase and uppercase)
+      if (event.altKey && (event.key === 't' || event.key === 'T') && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        if (DEBUG) console.log('[YT-TabFS] Alt+T detected, key:', event.key, 'code:', event.code);
+        // Try to prevent YouTube from handling this
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
         handleToggle();
         return false;
       }
-    }, { capture: true });
+    };
     
-    // Also add to window object as additional fallback
-    window.addEventListener('keydown', (event: KeyboardEvent) => {
-      // Check for Alt+T
-      if (event.altKey && event.key.toLowerCase() === 't' && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
-        console.log('[YT-TabFS] Alt+T detected via window listener');
-        event.preventDefault();
-        event.stopPropagation();
-        handleToggle();
-        return false;
-      }
-    }, { capture: true });
+    // Add to document with highest priority (capture phase)
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
     
-    console.log('[YT-TabFS] EventBridge initialized - Alt+T shortcut ready');
+    // Also add to window for redundancy
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+    
+    // Firefox-specific: Also listen on the body element
+    if (document.body) {
+      document.body.addEventListener('keydown', handleKeyDown, { capture: true });
+    }
+    
+    if (DEBUG) console.log('[YT-TabFS] EventBridge initialized - Alt+T shortcut ready');
   }
 }
 
@@ -380,7 +384,7 @@ function checkVideoChange(): void {
   const newVideoId = getVideoId();
   if (newVideoId !== currentVideoId) {
     currentVideoId = newVideoId;
-    console.log('[YT-TabFS] Video changed to:', newVideoId);
+    if (DEBUG) console.log('[YT-TabFS] Video changed to:', newVideoId);
     
     // Reset and reinitialize
     UIInjector.reset();
@@ -394,12 +398,12 @@ function checkVideoChange(): void {
  * Setup video - SponsorBlock style initialization
  */
 async function setupVideo(): Promise<void> {
-  console.log('[YT-TabFS] Setting up video');
+  if (DEBUG) console.log('[YT-TabFS] Setting up video');
   
   // Wait for video to be ready
   const videoReady = await waitForVideo();
   if (!videoReady) {
-    console.log('[YT-TabFS] Video not ready, retrying...');
+    if (DEBUG) console.log('[YT-TabFS] Video not ready, retrying...');
     // Retry with increasing delays
     setTimeout(() => setupVideo(), 1000);
     setTimeout(() => setupVideo(), 5000);
@@ -415,13 +419,13 @@ async function setupVideo(): Promise<void> {
     
     injected = UIInjector.inject();
     if (injected) {
-      console.log('[YT-TabFS] Button injected successfully after', delay, 'ms');
+      if (DEBUG) console.log('[YT-TabFS] Button injected successfully after', delay, 'ms');
       break;
     }
   }
   
   if (!injected) {
-    console.error('[YT-TabFS] Failed to inject button after all attempts');
+    if (DEBUG) console.error('[YT-TabFS] Failed to inject button after all attempts');
   }
 
   // Restore state if tab-fullscreen was previously enabled
@@ -436,7 +440,7 @@ async function setupVideo(): Promise<void> {
  * Initialize extension - SponsorBlock style
  */
 async function init(): Promise<void> {
-  console.log('[YT-TabFS] Initializing extension');
+  if (DEBUG) console.log('[YT-TabFS] Initializing extension');
   
   // Initialize event bridge
   EventBridge.init();
@@ -475,7 +479,7 @@ async function init(): Promise<void> {
       injectionTimeout = setTimeout(() => {
         const controls = getControls();
         if (controls && !document.getElementById(BUTTON_ID)) {
-          console.log('[YT-TabFS] Controls appeared, injecting button');
+          if (DEBUG) console.log('[YT-TabFS] Controls appeared, injecting button');
           UIInjector.inject();
         }
       }, 100);
@@ -487,22 +491,19 @@ async function init(): Promise<void> {
 }
 
 // Log extension version for debugging
-console.log('[YT-TabFS] Content script loaded v1.2.0');
-
-// Initialize EventBridge immediately for keyboard shortcuts
-EventBridge.init();
+if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.0');
 
 // Start initialization with multiple strategies
 if (document.readyState === 'loading') {
-  console.log('[YT-TabFS] Document still loading, waiting for DOMContentLoaded');
+  if (DEBUG) console.log('[YT-TabFS] Document still loading, waiting for DOMContentLoaded');
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('[YT-TabFS] DOMContentLoaded fired');
-    init().catch(err => console.error('[YT-TabFS] Init error:', err));
+    if (DEBUG) console.log('[YT-TabFS] DOMContentLoaded fired');
+    init().catch(err => { if (DEBUG) console.error('[YT-TabFS] Init error:', err); });
   });
 } else {
-  console.log('[YT-TabFS] Document ready, initializing immediately');
+  if (DEBUG) console.log('[YT-TabFS] Document ready, initializing immediately');
   init().catch(err => {
-    console.error('[YT-TabFS] Initialization error:', err);
+    if (DEBUG) console.error('[YT-TabFS] Initialization error:', err);
     // Retry initialization
     setTimeout(() => init(), 1000);
   });
@@ -510,9 +511,9 @@ if (document.readyState === 'loading') {
 
 // Also try after a small delay to ensure YouTube's scripts are loaded
 setTimeout(() => {
-  console.log('[YT-TabFS] Delayed initialization attempt');
+  if (DEBUG) console.log('[YT-TabFS] Delayed initialization attempt');
   if (!document.getElementById(BUTTON_ID)) {
-    init().catch(err => console.error('[YT-TabFS] Delayed init error:', err));
+    init().catch(err => { if (DEBUG) console.error('[YT-TabFS] Delayed init error:', err); });
   }
 }, 100);
 
@@ -521,7 +522,7 @@ const waitForYouTubePlayer = () => {
   const checkPlayer = () => {
     const moviePlayer = document.getElementById('movie_player');
     if (moviePlayer && moviePlayer.classList.contains('html5-video-player')) {
-      console.log('[YT-TabFS] YouTube player detected, ensuring initialization');
+      if (DEBUG) console.log('[YT-TabFS] YouTube player detected, ensuring initialization');
       if (!document.getElementById(BUTTON_ID) && window.location.pathname.includes('/watch')) {
         setupVideo();
       }
@@ -540,7 +541,7 @@ const waitForRightControls = () => {
   const checkControls = () => {
     const rightControlsLeft = document.querySelector('.ytp-chrome-controls .ytp-right-controls .ytp-right-controls-left');
     if (rightControlsLeft && !document.getElementById(BUTTON_ID) && window.location.pathname.includes('/watch')) {
-      console.log('[YT-TabFS] Right controls left section detected, injecting button');
+      if (DEBUG) console.log('[YT-TabFS] Right controls left section detected, injecting button');
       UIInjector.inject();
     } else if (!rightControlsLeft) {
       setTimeout(checkControls, 200);
@@ -553,13 +554,13 @@ waitForRightControls();
 
 // Listen for YouTube's navigation events
 document.addEventListener('yt-navigate-finish', () => {
-  console.log('[YT-TabFS] YouTube navigation finished');
+  if (DEBUG) console.log('[YT-TabFS] YouTube navigation finished');
   checkVideoChange();
 });
 
 // Listen for when player becomes ready
 document.addEventListener('yt-player-updated', () => {
-  console.log('[YT-TabFS] YouTube player updated');
+  if (DEBUG) console.log('[YT-TabFS] YouTube player updated');
   if (window.location.pathname.includes('/watch') && !document.getElementById(BUTTON_ID)) {
     setupVideo();
   }
@@ -567,10 +568,10 @@ document.addEventListener('yt-player-updated', () => {
 
 // Try one more time after page load
 window.addEventListener('load', () => {
-  console.log('[YT-TabFS] Window load event');
+  if (DEBUG) console.log('[YT-TabFS] Window load event');
   setTimeout(() => {
     if (window.location.pathname.includes('/watch') && !document.getElementById(BUTTON_ID)) {
-      console.log('[YT-TabFS] Final attempt after window load');
+      if (DEBUG) console.log('[YT-TabFS] Final attempt after window load');
       setupVideo();
     }
   }, 500);
