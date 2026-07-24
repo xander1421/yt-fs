@@ -121,18 +121,7 @@ namespace ToggleButton {
   function handleClick(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    
-    const currentState = StateManager.getState();
-    const newState = !currentState;
-    
-    if (newState) {
-      DOMOverlay.enable();
-    } else {
-      DOMOverlay.disable();
-    }
-    
-    StateManager.setState(newState);
-    updateButtonState(newState);
+    setTabFullscreen(!StateManager.getState());
   }
 
   export function updateButtonState(isEnabled: boolean): void {
@@ -150,6 +139,25 @@ namespace ToggleButton {
   export function getButton(): HTMLElement | null {
     return button;
   }
+}
+
+/**
+ * Single source of truth: sessionStorage state drives the DOM class + button UI.
+ * Every enable/disable path goes through here so the three never drift.
+ */
+function setTabFullscreen(isEnabled: boolean): void {
+  if (isEnabled) {
+    DOMOverlay.enable();
+  } else {
+    DOMOverlay.disable();
+  }
+  StateManager.setState(isEnabled);
+  ToggleButton.updateButtonState(isEnabled);
+  // YT lays out the player + control bar from its own cached size. Without a
+  // nudge, enabling leaves the nav bar at the old width and disabling leaves the
+  // video huge/pinned top-left (stale inline styles). Force a recompute after
+  // the class change has been applied (rAF = after layout).
+  requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
 }
 
 /**
@@ -355,17 +363,10 @@ namespace EventBridge {
       }
     };
     
-    // Add to document with highest priority (capture phase)
+    // One document-level capture listener catches the key before YouTube's own
+    // handlers (window/body were redundant - same handler, earlier capture target).
     document.addEventListener('keydown', handleKeyDown, { capture: true });
-    
-    // Also add to window for redundancy
-    window.addEventListener('keydown', handleKeyDown, { capture: true });
-    
-    // Firefox-specific: Also listen on the body element
-    if (document.body) {
-      document.body.addEventListener('keydown', handleKeyDown, { capture: true });
-    }
-    
+
     if (DEBUG) console.log('[YT-TabFS] EventBridge initialized - Alt+T shortcut ready');
   }
 }
@@ -429,26 +430,31 @@ async function setupVideo(): Promise<void> {
   }
 
   // Restore state if tab-fullscreen was previously enabled
-  const savedState = StateManager.getState();
-  if (savedState) {
-    DOMOverlay.enable();
-    ToggleButton.updateButtonState(true);
+  if (StateManager.getState()) {
+    setTabFullscreen(true);
   }
 }
 
 /**
  * Initialize extension - SponsorBlock style
  */
+let hasInited = false;
+
 async function init(): Promise<void> {
+  // Guard: init() is invoked from many entry points (DOMContentLoaded, timers,
+  // retries). Without this, every call re-adds keyboard listeners, observers,
+  // and a setInterval -> Alt+T fires the toggle N times and cancels itself out.
+  if (hasInited) return;
+  hasInited = true;
+
   if (DEBUG) console.log('[YT-TabFS] Initializing extension');
-  
+
   // Initialize event bridge
   EventBridge.init();
-  
+
   // Clean up any stale state if not on video page
   if (!window.location.pathname.includes('/watch') && DOMOverlay.isEnabled()) {
-    DOMOverlay.disable();
-    StateManager.setState(false);
+    setTabFullscreen(false);
   }
 
   // Setup initial video if on watch page
@@ -491,7 +497,7 @@ async function init(): Promise<void> {
 }
 
 // Log extension version for debugging
-if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.0');
+if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.1');
 
 // Start initialization with multiple strategies
 if (document.readyState === 'loading') {

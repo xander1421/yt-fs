@@ -2,6 +2,17 @@
 
 All notable changes to the YouTube Tab-Fullscreen extension will be documented in this file.
 
+## [1.2.1] - 2026-07-12
+
+### Fixed
+- Tab-fullscreen now tears down cleanly on toggle off — video no longer stays enlarged and pinned to the top-left corner
+- Control/nav bar now stretches to the full viewport width when tab-fullscreen is activated (previously kept its pre-fullscreen width)
+- Alt+T no longer double-fires from duplicate listeners, which could cancel the toggle
+
+### Changed
+- Single source of truth for the enabled state (storage, page class, and button now stay in sync)
+- Force a layout recompute on toggle so YouTube resizes the player and controls to the new container
+
 ## [1.2.0] - 2024-12-30
 
 ### Added
