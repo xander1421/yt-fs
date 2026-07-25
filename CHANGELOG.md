@@ -2,6 +2,15 @@
 
 All notable changes to the YouTube Tab-Fullscreen extension will be documented in this file.
 
+## [1.2.2] - 2026-07-12
+
+### Fixed
+- Tab-fullscreen and YouTube's native fullscreen are now mutually exclusive.
+  Entering native fullscreen suspends the tab-fill overlay (and restores it on
+  exit); toggling tab-fullscreen on while in native fullscreen leaves native
+  fullscreen first. This prevents the two modes from stacking, which could
+  break YouTube's on-screen controls (including the exit-fullscreen button).
+
 ## [1.2.1] - 2026-07-12
 
 ### Fixed

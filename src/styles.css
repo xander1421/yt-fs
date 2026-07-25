@@ -1,18 +1,18 @@
 /* YouTube Tab-Fullscreen Extension Styles */
 
 /* Hide everything except the video player when tab-fullscreen is active */
-html.yt-tabfs-enabled ytd-masthead,
-html.yt-tabfs-enabled #secondary,
-html.yt-tabfs-enabled #primary #below,
-html.yt-tabfs-enabled #comments,
-html.yt-tabfs-enabled #related,
-html.yt-tabfs-enabled ytd-watch-metadata,
-html.yt-tabfs-enabled ytd-watch-next-secondary-results-renderer {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) ytd-masthead,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #secondary,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #primary #below,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #comments,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #related,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) ytd-watch-metadata,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) ytd-watch-next-secondary-results-renderer {
   display: none !important;
 }
 
 /* Make the main video player (#movie_player) fullscreen with maximum specificity */
-html.yt-tabfs-enabled #movie_player.html5-video-player {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player.html5-video-player {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -23,7 +23,7 @@ html.yt-tabfs-enabled #movie_player.html5-video-player {
 }
 
 /* Override the hardcoded video element positioning with maximum specificity */
-html.yt-tabfs-enabled #movie_player .html5-video-container {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player .html5-video-container {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -33,10 +33,10 @@ html.yt-tabfs-enabled #movie_player .html5-video-container {
 }
 
 /* Simplified video styling - maintain aspect ratio and fill container properly */
-html.yt-tabfs-enabled #movie_player.html5-video-player video.video-stream.html5-main-video[style],
-html.yt-tabfs-enabled #movie_player.html5-video-player video.html5-main-video[style],
-html.yt-tabfs-enabled #movie_player.html5-video-player video.video-stream[style],
-html.yt-tabfs-enabled #movie_player video[style] {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player.html5-video-player video.video-stream.html5-main-video[style],
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player.html5-video-player video.html5-main-video[style],
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player.html5-video-player video.video-stream[style],
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player video[style] {
   position: static !important;
   top: auto !important;
   left: auto !important;
@@ -53,7 +53,7 @@ html.yt-tabfs-enabled #movie_player video[style] {
 }
 
 /* Additional video container overrides with higher specificity */
-html.yt-tabfs-enabled .html5-video-player.ytp-transparent {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .html5-video-player.ytp-transparent {
   width: 100vw !important;
   height: 100vh !important;
   position: fixed !important;
@@ -63,23 +63,23 @@ html.yt-tabfs-enabled .html5-video-player.ytp-transparent {
 }
 
 /* Remove any potential black backgrounds from all video-related containers */
-html.yt-tabfs-enabled #movie_player,
-html.yt-tabfs-enabled #movie_player .html5-video-container,
-html.yt-tabfs-enabled .html5-video-player,
-html.yt-tabfs-enabled .ytp-chrome-bottom {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #movie_player .html5-video-container,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .html5-video-player,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-chrome-bottom {
   background-color: transparent !important;
   background: transparent !important;
 }
 
 /* Hide YouTube's top overlay elements in tab-fullscreen */
-html.yt-tabfs-enabled .ytp-chrome-top,
-html.yt-tabfs-enabled .ytp-show-cards-title,
-html.yt-tabfs-enabled .ytp-gradient-top {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-chrome-top,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-show-cards-title,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-gradient-top {
   display: none !important;
 }
 
 /* Fix video controls positioning - ensure they're at the bottom */
-html.yt-tabfs-enabled .ytp-chrome-bottom {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-chrome-bottom {
   position: fixed !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -91,7 +91,7 @@ html.yt-tabfs-enabled .ytp-chrome-bottom {
 }
 
 /* Ensure all control elements within the bottom chrome are properly positioned */
-html.yt-tabfs-enabled .ytp-chrome-controls {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-chrome-controls {
   position: relative !important;
   width: 100% !important;
   margin: 0 !important;
@@ -99,7 +99,7 @@ html.yt-tabfs-enabled .ytp-chrome-controls {
 }
 
 /* Fix progress bar positioning */
-html.yt-tabfs-enabled .ytp-progress-bar-container {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-progress-bar-container {
   position: relative !important;
   width: 100% !important;
   left: 0 !important;
@@ -107,13 +107,13 @@ html.yt-tabfs-enabled .ytp-progress-bar-container {
 }
 
 /* Fix control buttons positioning */
-html.yt-tabfs-enabled .ytp-left-controls,
-html.yt-tabfs-enabled .ytp-right-controls {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-left-controls,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-right-controls {
   position: relative !important;
 }
 
 /* Ensure the primary container doesn't interfere */
-html.yt-tabfs-enabled #primary {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) #primary {
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -166,7 +166,7 @@ html.yt-tabfs-enabled #primary {
 }
 
 /* Handle theater mode compatibility */
-html.yt-tabfs-enabled.theater-mode ytd-player {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs).theater-mode ytd-player {
   position: fixed !important;
   inset: 0 !important;
   width: 100% !important;
@@ -174,24 +174,24 @@ html.yt-tabfs-enabled.theater-mode ytd-player {
 }
 
 /* Handle mini-player compatibility */
-html.yt-tabfs-enabled .miniplayer {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .miniplayer {
   display: none !important;
 }
 
 /* Handle ads overlay in fullscreen */
-html.yt-tabfs-enabled .ytp-ad-overlay-container {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) .ytp-ad-overlay-container {
   position: absolute !important;
   z-index: 10000 !important;
 }
 
 /* Handle YouTube's dark/light theme compatibility */
-html.yt-tabfs-enabled[dark] ytd-player,
-html.yt-tabfs-enabled:not([dark]) ytd-player {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs)[dark] ytd-player,
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs):not([dark]) ytd-player {
   background: #000 !important;
 }
 
 /* Additional video element targeting for better compatibility */
-html.yt-tabfs-enabled ytd-player #movie_player {
+html.yt-tabfs-enabled:not(.yt-tabfs-realfs) ytd-player #movie_player {
   width: 100% !important;
   height: 100% !important;
   position: absolute !important;

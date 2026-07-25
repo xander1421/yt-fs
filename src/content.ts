@@ -147,6 +147,12 @@ namespace ToggleButton {
  */
 function setTabFullscreen(isEnabled: boolean): void {
   if (isEnabled) {
+    // Mutually exclusive with native fullscreen: never let the two stack.
+    // If the browser is in real fullscreen, leave it first so tab-fill applies
+    // cleanly instead of fighting YouTube's fullscreen layout.
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
     DOMOverlay.enable();
   } else {
     DOMOverlay.disable();
@@ -452,6 +458,18 @@ async function init(): Promise<void> {
   // Initialize event bridge
   EventBridge.init();
 
+  // Keep native (real) fullscreen and tab-fullscreen mutually exclusive. While
+  // the browser is in real fullscreen, our overlay CSS collides with YouTube's
+  // own fullscreen layout and collapses its controls (incl. the exit button) to
+  // 0x0 - leaving no way out. Tagging <html> suspends every overlay rule (they
+  // are scoped `:not(.yt-tabfs-realfs)`) until real fullscreen ends.
+  document.addEventListener('fullscreenchange', () => {
+    document.documentElement.classList.toggle('yt-tabfs-realfs', !!document.fullscreenElement);
+    // Overlay was just suspended (entering) or restored (leaving); nudge YouTube
+    // to re-lay-out the player for the new size.
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+  });
+
   // Clean up any stale state if not on video page
   if (!window.location.pathname.includes('/watch') && DOMOverlay.isEnabled()) {
     setTabFullscreen(false);
@@ -497,7 +515,7 @@ async function init(): Promise<void> {
 }
 
 // Log extension version for debugging
-if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.1');
+if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.2');
 
 // Start initialization with multiple strategies
 if (document.readyState === 'loading') {
