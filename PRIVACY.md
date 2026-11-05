@@ -1,7 +1,7 @@
 # Privacy Policy for YouTube Tab-Fullscreen
 
-**Last Updated**: December 30, 2024  
-**Version**: 1.2.0
+**Last Updated**: November 5, 2026  
+**Version**: 1.3.0
 
 ## Overview
 
@@ -11,11 +11,13 @@ YouTube Tab-Fullscreen ("the Extension") is committed to protecting your privacy
 
 ### Local Storage Only
 - **Tab-Fullscreen Preferences**: We store your tab-fullscreen state (enabled/disabled) locally in your browser using `sessionStorage`
+- **Doomscroll Meter**: We store a local daily scroll counter (distance scrolled and active time on YouTube feed pages) and your extension preferences in your browser's local extension storage (`chrome.storage.local`). This never leaves your device; the counter resets each day
 - **No Personal Data**: We do not collect, store, or transmit any personal information
 - **No Tracking**: We do not use analytics, tracking pixels, or any monitoring tools
 
 ### Permissions Used
 - **`activeTab`**: Required to inject the tab-fullscreen button and communicate with the content script on YouTube pages
+- **`storage`**: Required to save your preferences and the local daily scroll counter on your device (via `chrome.storage.local`). This is local storage only — it is never transmitted anywhere
 
 ## How We Use Information
 

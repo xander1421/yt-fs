@@ -198,3 +198,192 @@ html.yt-tabfs-enabled:not(.yt-tabfs-realfs) ytd-player #movie_player {
   top: 0 !important;
   left: 0 !important;
 }
+
+/* ============================================================
+   Doomscroll meter (feed/home/Shorts) - peek badge + soft nudge
+   ============================================================ */
+
+/* Peek banner: shows while scrolling the feed, fades when idle. Top-center and
+   large so it's actually noticed; pointer-events:none so it never blocks clicks. */
+.yt-ds-badge {
+  position: fixed !important;
+  top: 70px; /* clear of YouTube's masthead */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483000;
+  background: rgba(15, 15, 15, 0.94);
+  color: #fff;
+  font: 700 17px/1.25 Roboto, "Segoe UI", Arial, sans-serif;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.yt-ds-badge.yt-ds-hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+/* Soft nudge: dismissible modal, never blocks the page */
+.yt-ds-nudge {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.yt-ds-nudge.yt-ds-hide {
+  display: none;
+}
+
+.yt-ds-card {
+  width: min(92vw, 380px);
+  background: #212121;
+  color: #fff;
+  border-radius: 14px;
+  padding: 26px 22px 22px;
+  text-align: center;
+  font-family: Roboto, "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.yt-ds-emoji {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.yt-ds-head {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.yt-ds-sub {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.yt-ds-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.yt-ds-btns button {
+  flex: 1;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  border: none;
+  font: 600 14px/1 Roboto, "Segoe UI", Arial, sans-serif !important;
+  cursor: pointer;
+}
+
+.yt-ds-keep {
+  background: #272727 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.yt-ds-done {
+  background: #fff !important;
+  color: #0f0f0f !important;
+}
+
+/* Subtle "share this" link under the nudge buttons — the viral tap */
+.yt-ds-sharelink {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 8px !important;
+  background: none !important;
+  border: none !important;
+  color: #8ab4f8 !important;
+  font: 600 13px/1 Roboto, "Segoe UI", Arial, sans-serif !important;
+  cursor: pointer;
+}
+
+.yt-ds-sharelink:hover {
+  color: #aecbfa !important;
+  text-decoration: underline;
+}
+
+.yt-ds-sharelink:disabled {
+  color: #888 !important;
+  cursor: default;
+  text-decoration: none;
+}
+
+.yt-ds-keep:hover {
+  background: #3a3a3a !important;
+}
+
+.yt-ds-done:hover {
+  background: #e6e6e6 !important;
+}
+
+/* Hard block (10 min): stronger, escapable. Darker + blurred to really obscure
+   the feed; dismissible only via its buttons. */
+.yt-ds-block {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.yt-ds-block.yt-ds-hide {
+  display: none;
+}
+
+.yt-ds-blockcard {
+  width: min(92vw, 420px);
+}
+
+/* Go-to-top is the emphasised (healthy) choice; Add-5-min is the friction escape */
+.yt-ds-top {
+  background: #fff !important;
+  color: #0f0f0f !important;
+}
+
+.yt-ds-add {
+  background: #272727 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.yt-ds-top:hover {
+  background: #e6e6e6 !important;
+}
+
+.yt-ds-add:hover {
+  background: #3a3a3a !important;
+}
+
+.yt-ds-cfg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  font: 400 13px/1.3 Roboto, "Segoe UI", Arial, sans-serif;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.yt-ds-cfg input {
+  accent-color: #ff0000;
+  cursor: pointer;
+}

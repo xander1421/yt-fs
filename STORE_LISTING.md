@@ -13,6 +13,7 @@ YouTube Tab-Fullscreen expands videos to fill your entire browser tab, creating 
 ⌨️ **Quick Toggle** - Press Alt+T or click the button to instantly toggle fullscreen
 🧭 **Smart Memory** - Maintains your viewing preference as you browse videos
 🎨 **Seamless Integration** - Perfectly matches YouTube's native design
+🏔️ **Doomscroll Meter** - See how far you've scrolled the feed (as a fun distance) and get a gentle nudge before the rabbit hole wins
 ⚡ **Lightweight** - Under 50KB, no performance impact
 
 ## 🚀 **How to Use**
@@ -34,7 +35,7 @@ YouTube Tab-Fullscreen expands videos to fill your entire browser tab, creating 
 
 - **No data collection** - Zero tracking or analytics
 - **No external connections** - Works entirely offline
-- **Minimal permissions** - Only activeTab permission required
+- **Minimal permissions** - Only `activeTab` and `storage` (local only; nothing leaves your device)
 - **Open source approach** - Transparent, auditable code
 
 ## 🔧 **Technical Excellence**
