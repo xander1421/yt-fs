@@ -1,6 +1,7 @@
 /**
  * YouTube Tab-Fullscreen Extension - Content Script
  */
+import { initDoomScroll } from './doomscroll';
 
 // Debug flag - set to false for production
 const DEBUG = false;
@@ -230,7 +231,7 @@ async function waitForVideo(): Promise<boolean> {
       try {
         controls = await wait(() => getControls(), 5000, 100);
         if (controls) break;
-      } catch (e) {
+      } catch {
         if (DEBUG) console.log('[YT-TabFS] Controls wait attempt', attempts + 1, 'failed, retrying...');
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
@@ -458,6 +459,10 @@ async function init(): Promise<void> {
   // Initialize event bridge
   EventBridge.init();
 
+  // Doomscroll meter on feed surfaces (home / subscriptions / Shorts). Independent
+  // of tab-fullscreen; never runs on the /watch page.
+  initDoomScroll();
+
   // Keep native (real) fullscreen and tab-fullscreen mutually exclusive. While
   // the browser is in real fullscreen, our overlay CSS collides with YouTube's
   // own fullscreen layout and collapses its controls (incl. the exit button) to
@@ -515,7 +520,7 @@ async function init(): Promise<void> {
 }
 
 // Log extension version for debugging
-if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.2.2');
+if (DEBUG) console.log('[YT-TabFS] Content script loaded v1.3.0');
 
 // Start initialization with multiple strategies
 if (document.readyState === 'loading') {

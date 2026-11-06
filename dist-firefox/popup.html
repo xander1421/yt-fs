@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Tab-Fullscreen</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        width: 300px;
+        margin: 0;
+        padding: 14px;
+        background: #0f0f0f;
+        color: #fff;
+        font: 14px/1.4 Roboto, "Segoe UI", Arial, sans-serif;
+      }
+      .hdr {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .card {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .stat {
+        flex: 1;
+        background: #212121;
+        border-radius: 10px;
+        padding: 10px 12px;
+        text-align: center;
+      }
+      .stat span {
+        display: block;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .stat label {
+        font-size: 11px;
+        color: #aaa;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-top: 1px solid #272727;
+      }
+      .btn {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 999px;
+        background: #fff;
+        color: #0f0f0f;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #e6e6e6;
+      }
+      .btn.ghost {
+        background: #272727;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+      .btn.ghost:hover {
+        background: #3a3a3a;
+      }
+      #share {
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      .kbd {
+        font-size: 11px;
+        color: #888;
+        font-weight: 400;
+      }
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #ff0000;
+        cursor: pointer;
+      }
+      .foot {
+        margin-top: 12px;
+        font-size: 11px;
+        color: #777;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hdr">YouTube Tab-Fullscreen</div>
+
+    <div class="card">
+      <div class="stat"><span id="dist">—</span><label>scrolled today</label></div>
+      <div class="stat"><span id="time">—</span><label>on the feed</label></div>
+    </div>
+
+    <button id="share" class="btn ghost">📤 Share my stats</button>
+
+    <button id="fs" class="btn">⛶ Tab-fullscreen <span class="kbd">Alt+T</span></button>
+
+    <div class="row">
+      <label for="enabled">Doomscroll meter</label>
+      <input type="checkbox" id="enabled" />
+    </div>
+    <div class="row">
+      <label for="hardBlock">Hard block at limit</label>
+      <input type="checkbox" id="hardBlock" />
+    </div>
+
+    <button id="opts" class="btn ghost">⚙ Full settings</button>
+
+    <div class="foot">all local · no tracking</div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -31,6 +31,9 @@ export default [
       'no-undef': 'off', // TypeScript handles this
       
       // TypeScript-specific overrides
+      // Base rule misfires on TS type positions (e.g. function-type param names);
+      // defer to the type-aware rule, which still catches real unused vars.
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       

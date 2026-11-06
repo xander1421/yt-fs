@@ -43,33 +43,6 @@ browserAPI.commands.onCommand.addListener(async (command: string) => {
   }
 });
 
-// Handle extension icon click
-// For Manifest V3 (Chrome)
-if (browserAPI.action?.onClicked) {
-  browserAPI.action.onClicked.addListener(async (tab: any) => {
-    if (tab.id && tab.url?.includes('youtube.com')) {
-      try {
-        await browserAPI.tabs.sendMessage(tab.id, {
-          action: 'toggle-tabfs'
-        });
-      } catch (error) {
-        // Silent fail
-      }
-    }
-  });
-}
-
-// For Manifest V2 (Firefox)
-if (browserAPI.browserAction?.onClicked) {
-  browserAPI.browserAction.onClicked.addListener(async (tab: any) => {
-    if (tab.id && tab.url?.includes('youtube.com')) {
-      try {
-        await browserAPI.tabs.sendMessage(tab.id, {
-          action: 'toggle-tabfs'
-        });
-      } catch (error) {
-        // Silent fail
-      }
-    }
-  });
-}
+// The toolbar icon now opens the popup (manifest `default_popup`), so there is no
+// onClicked handler. Tab-fullscreen is still reachable via the in-player button,
+// the Alt+T command above, and the popup's toggle button.
